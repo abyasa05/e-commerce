@@ -1,16 +1,37 @@
-<html>
-    <!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
 
-    <head>
-        <title>NetBuy</title>
-        <meta charset="UTF-8">
-        <meta name="author" content="Muhammad Abyasa Pratama">
-        <meta name="description" content="This is an e-commerce application">
-    </head>
+<h2>Welcome to NetBuy</h2>
 
-    <body>
-        <h2>Welcome to NetBuy</h2>
-        <p>Nama: Muhammad Abyasa Pratama</p>
-        <p>Kelas: F</p>
-    </body>
-</html>
+<p>Nama:</p>
+<p><strong>{{ name }}</strong></p>
+
+<p>Kelas:</p>
+<p><strong>{{ class }}</strong></p>
+
+{% if not shop_entries %}
+<p>No product added yet.</p>
+{% else %}
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+    </tr>
+
+    {% for product in shop_entries %}
+    <tr>
+        <td>{{product.name}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product.description}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<a href="{% url 'main:create_shop_entry' %}">
+    <button>Add Product</button>
+</a>
+
+{% endblock content %}
