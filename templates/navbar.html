@@ -1,4 +1,4 @@
-<nav class="bg-yellow-400 shadow-xl fixed top-0 left-0 w-screen">
+<nav class="bg-yellow-400 shadow-xl fixed top-0 left-0 w-screen z-1000">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
@@ -29,11 +29,11 @@
       </div>
     </div>
     <!-- Mobile menu -->
-    <div class="mobile-menu hidden md:hidden  px-4 w-full md:max-w-full">
+    <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full">
       <div class="pt-2 pb-3 space-y-1 mx-auto">
         {% if user.is_authenticated %}
-          <span class="block text-gray-300 px-3 py-2">Logged in as {{ user.username }}</span>
-          <a href="{% url 'main:logout' %}" class="block text-center border-2 border-yellow-900 text-yellow-900 hover:bg-red-700 hover:border-red-700 hover:text-yellow-500 font-bold py-2 px-4 rounded transition duration-300">
+          <span class="block text-yellow-800 px-3 py-2">Logged in as {{ user.username }}</span>
+          <a href="{% url 'main:logout' %}" class="block text-center border-2 border-yellow-900 text-yellow-900 hover:bg-red-700 hover:border-red-700 hover:text-yellow-500 font-bold py-2 px-4 rounded-full transition duration-300">
             Logout
           </a>
         {% else %}

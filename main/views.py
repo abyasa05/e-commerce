@@ -85,13 +85,10 @@ def logout_user(request):
     return response
 
 def edit_item(request, id):
-    # Get mood entry berdasarkan id
     item = ShopEntry.objects.get(pk = id)
-    # Set mood entry sebagai instance dari form
     form = ShopEntryForm(request.POST or None, instance=item)
 
     if form.is_valid() and request.method == "POST":
-        # Simpan form dan kembali ke halaman awal
         form.save()
         return HttpResponseRedirect(reverse('main:show_main'))
 
@@ -99,9 +96,6 @@ def edit_item(request, id):
     return render(request, "edit_item.html", context)
 
 def delete_item(request, id):
-    # Get mood berdasarkan id
     item = ShopEntry.objects.get(pk = id)
-    # Hapus mood
     item.delete()
-    # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:show_main'))

@@ -7,14 +7,10 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-yellow-100 flex flex-col">
-  <div class="p-2 mb-3 relative">
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-yellow-100 flex flex-col z-50">
+  <div class="p-2 mb-3 relative z-50">
     <div class="flex justify-center">
       {% include "card_info.html" with value=name %}
-    </div>
-    <div class="h-full w-full py-6 absolute top-0 left-0 z-20 md:hidden flex ">
-      <div class="h-full min-w-4 bg-indigo-700 mx-auto">
-      </div>
     </div>
 </div>
     <div class="px-3 mb-4">
