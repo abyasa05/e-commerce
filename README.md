@@ -4,88 +4,120 @@
  
 [Tautan menuju Aplikasi](http://muhammad-abyasa-netbuy.pbp.cs.ui.ac.id/)
 
-1. Pertama-tama, jika suatu elemen HTML memiliki CSS selector yang dibuat secara inline (didefinisikan secara langsung dalam tag HTML), maka selector tersebut yang menjadi prioritas pertama. Misalkan, jika elemen HTML tersebut diberikan atribut warna pada beberapa selector, maka warna yang didefinisikan dalam selector inline yang akan ditampilkan sebagai warna elemen tersebut. Sementara itu, prioritas kedua setelah inline terdapat dalam selector ID dari elemen tersebut. Selector class kemudian menjadi prioritas ketiga dan selector berbasis jenis elemen tersebut (p, div, dll) menjadi prioritas terakhir jika tidak ada definisi dari ketiga selector sebelumnya.
+1. 
 
-2. _Responsive design_ merupakan konsep yang penting dalam pengembangan web agar suatu aplikasi memiliki tampilan antarmuka yang dinamis. Dengan implementasi _responsive design_, unsur-unsur yang terdapat dalam suatu page menjadi tersusun dengan rapi menyesuaikan dengan ukuran layar atau _window_ device. Penyusunan page secara dinamis membuat user merasa nyaman dalam menggunakan aplikasi tersebut, terlepas dari ukuran device yang digunakan user tersebut. Sebagian besar aplikasi dan website yang beredar sekarang, seperti YouTube dan Instagram, sudah menerapkan responsive design dalam penempatan layout _page_-nya.
+2. 
 
-3. Dalam suatu elemen HTML, padding merupakan area yang mengatur jarak antara suatu konten (misalkan teks) dengan border-nya. Sementara itu, border merupakan area yang melingkupi suatu konten dan berperan sebagai pembatas luar dari container elemen tersebut. Sementara itu, margin merupakan area yang mengatur jarak antara elemen tersebut dengan elemen-elemen lainnya dalam berkas HTML.
+3. 
 
-4. Flexbox digunakan untuk menyusun beberapa elemen dalam satu dimensi saja (baik secara horizontal maupun vertikal), di mana tiap elemen bisa diberikan pengaturan _space_ yang digunakan. Sementara itu, grid digunakan untuk menyusun beberapa elemen dalam ruang dua dimensi menggunakan prinsip pembagian baris dan kolom untuk tiap elemennya. Flexbox lebih baik digunakan untuk elemen yang perlu disusun secara linear seperti _navigation bar_. Sementara itu, grid lebih baik digunakan untuk elemen yang perlu disusun dalam suatu ruang, di mana masing-masing elemen bisa diberikan pembagian _space_ yang bervariasi, contohnya seperti penyusunan teks dan berbagai elemen lainnya dalam suatu _page_.
+4. 
 
-5. Berikut merupakan step-by-step implementasi Tugas 5:
+5. Berikut merupakan step-by-step implementasi Tugas 6:
 
-### Menambahkan Tailwind dan Membuat Fungsi Edit & Delete Entry
-Pertama-tama, tambahkan script tailwind dalam berkas `base.html` dengan menambahkan `<script src="https://cdn.tailwindcss.com"></script>` pada bagian _head_ agar _framework_ tailwind bisa digunakan pada _template_. Setelah itu, bukalah berkas `views.py` dan buatlah fungsi `edit_item` yang berfungsi untuk mengubah detail dari suatu entry seperti berikut:
+Pertama-tama, masuklah ke berkas `views.py` dan tambahkan method untuk menampilkan pesan error pada fungsi `login_user` seperti di bawah ini:
 ```
-def edit_item(request, id):
-    item = ShopEntry.objects.get(pk = id)
-    form = ShopEntryForm(request.POST or None, instance=item)
-
-    if form.is_valid() and request.method == "POST":
-        form.save()
-        return HttpResponseRedirect(reverse('main:show_main'))
-
-    context = {'form': form}
-    return render(request, "edit_item.html", context)
-```
-Setelah itu, buatlah berkas `edit_item.html` pada direktori `main/templates` yang berfungsi sebagai template untuk page edit entry. Kemudian, import fungsi yang sudah dibuat pada `views.py` dan tambahkan routing URL terhadap path seperti berikut:
-```
-path('edit-item/<uuid:id>', edit_item, name='edit_item'),
-```
-Bukalah pula berkas `main.html` pada `main/templates` dan tambahkan elemen button untuk mengedit entry pada elemen tabel yang menampilkan data tiap entry. Selanjutnya, pada berkas `views.py`, buatlah fungsi `delete_item` yang berfungsi untuk menghapus suatu entry seperti berikut:
-```
-def delete_item(request, id):
-    item = ShopEntry.objects.get(pk = id)
-    item.delete()
-    return HttpResponseRedirect(reverse('main:show_main'))
-```
-Kemudian, import-lah fungsi tersebut dalam berkas `views.py` dan tambahkan routing URL seperti berikut:
-```
-path('delete/<uuid:id>', delete_mood, name='delete_mood'),
-```
-
-### Konfigurasi Static Files
-Bukalah berkas settings.py dan pada bagian _middleware_, tambahkan WhiteNoise di bawah SecurityMiddleWare:
-```
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+if form.is_valid():
     ...
-]
-```
-Kemudian, aturlah konfigurasi untuk STATIC_URL, STATICFILES_DIRS, dan STATIC_URL seperti berikut:
-```
-STATIC_URL = '/static/'
-if DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR / 'static'
-    ]
 else:
-    STATIC_ROOT = BASE_DIR / 'static'
+    messages.error(request, "Invalid username or password. Please try again.")
 ```
 
-### Membuat Styling dengan CSS
-Selanjutnya, buatlah direktori `static/css` pada _root directory_ dan buatlah berkas `global.css` pada direktori tersebut. Agar `styling` yang dibuat pada berkas tersebut dapat digunakan dalam semua berkas `template`, tambahkan _link_ pada bagian _head_ berkas `base.html` seperti berikut:
+### Implementasi AJAX pada Form Entry ###
+Pada berkas views.py, tambahkan _import_ `csrf_exempt` dari `django.views.decorators.csrf` dan `require_POST` dari `django.views.decorators.http`. Lalu, buatlah fungsi `create_shop_entry_ajax` untuk membuat entry baru berdasarkan _request_ POST seperti berikut:
 ```
-<link rel="stylesheet" href="{% static 'css/global.css' %}"/>
-```
-Selanjutnya, buatlah berkas `navbar.html` pada subdirektori templates pada root directory. Buatlah suatu _navigation bar_ dengan bantuan penggunaan _container_ `<div>` dan FlexBox untuk mengatur _layout_ tiap elemen (_title_, keterangan nama akun, dan _button logout_) secara horizontal (atau vertikal untuk versi _mobile_). Setelah _navbar_ dibuat, tambahkan _template tag_ `{% include 'navbar.html' %}` dalam berkas `main.html`, `edit_item.html`, dan `create_shop_entry.html`.
+@csrf_exempt
+@require_POST
+def create_shop_entry_ajax(request):
+    name = request.POST.get("name")
+    price = request.POST.get("price")
+    description = request.POST.get("description")
+    user = request.user
 
-Kemudian, buatlah berkas `card_info.html` dan `card_item.html` pada subdirektori `main/templates`. Di sini, card_info.html merupakan digunakan sebagai _template card_ yang menampilkan informasi berupa nama akun _user_. Sementara itu, card_item.html digunakan sebagai _template card_ yang menampilkan instansi dari tiap entry yang sudah dibuat. _Card_ ini menampilkan seluruh informasi mengenai data entry (nama, deskripsi, dan harga) serta memiliki dua _button_, masing-masing untuk meng-_edit_ entry dan menghapus entry.
+    new_shop_entry = ShopEntry(
+        name=name,
+        price=price,
+        description=description,
+        user=user
+    )
+    new_shop_entry.save()
 
-Selanjutnya, buatlah subdirektori `static/images` dan tambahkan berkas gambar `empty.png` dalam subdirektori tersebut. Setelah itu, tambahkan elemen CSS pada berkas `main.html` untuk menambahkan _styling_ pada _page_ utama. Tambahkan pula _card_ yang menampilkan nama akun _user_ pada bagian atas _page_ dengan _template tag_ `{% include "card_info.html" with value=name %}`. Tampilkan pula tiap entry yang sudah dibuat menggunakan _item card_ yang sudah dibuat pada berkas `card_item.html` seperti berikut:
+    return HttpResponse(b"CREATED", status=201)
 ```
-{% if not shop_entries %}
-<div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-    <img src="{% static 'image/empty.png' %}" alt="Empty" class="w-32 h-32 mb-4"/>
-    <p class="text-center text-gray-600 mt-4">No items added yet.</p>
-</div>
-{% else %}
-<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
-    {% for item in shop_entries %}
-        {% include 'card_item.html' with item=item %}
-    {% endfor %}
-</div>
-{% endif %}
+Setelah itu, buatlah routing URL untuk fungsi tersebut dalam berkas views.py dengan meng-_import_ fungsi tersebut dan menambahkan path seperti berikut:
 ```
-Dapat dilihat bahwa jika belum ada entry yang dibuat, gambar `empty.png` akan ditampilkan pada _page_ beserta dengan keterangan. Setelah _page_ utama selesai dikustomisasi, tambahkan pula elemen CSS pada berkas `login.html` dan `register.html` untuk menambahkan styling pada _page_ _login_ dan _register_.
+path('create-ajax', create_shop_entry_ajax, name='create_shop_entry_ajax'),
+```
+Selanjutnya, bukalah kembali berkas views.py dan pada fungsi `show_main`, hapuslah baris `shop_entries = ShopEntry.objects.filter(user=request.user)` dan `'shop_entries': shop_entries,`. Kemudian, pada fungsi show_xml dan show_json, modifikasi baris `data = ShopEntry.objects.all()` menjadi `data = ShopEntry.objects.filter(user=request.user)`. Setelah itu, bukalah berkas `main.html` dan hapuslah _conditional logic_ yang berfungsi untuk menampilkan _item card_ pada halaman utama. Gantilah conditional logic tersebut dengan `div` berikut:
+```
+<div id="shop_entry_cards"></div>
+```
+Lalu, pada bagian bawah _endblock content_, tambahkan _block script_ `<script> </script>` untuk menambahkan fungsi-fungsi AJAX. Dalam _block script_ tersebut, tambahkan fungsi `getShopEntries` seperti berikut:
+```
+async function getShopEntries(){
+    return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+}
+```
+Lalu, buatlah fungsi bernama `refreshShopEntries` dalam _block script_ seperti berikut:
+```
+  async function refreshShopEntries() {
+    document.getElementById("shop_entry_cards").innerHTML = "";
+    document.getElementById("shop_entry_cards").className = "";
+    const shopEntries = await getShopEntries();
+    let htmlString = "";
+    let classNameString = "";
+
+    if (shopEntries.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/empty.png' %}" alt="Empty" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">No items added yet.</p>
+            </div>
+        `;
+    }
+    else {
+        classNameString = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full"
+        shopEntries.forEach((item) => {
+            const name = DOMPurify.sanitize(item.fields.name);
+            const description = DOMPurify.sanitize(item.fields.description);
+            htmlString += `
+            <div class="relative break-inside-avoid">
+                <div class="relative top-5 bg-white shadow-[0_1px_15px_rgba(0,0,0,0.4)] hover:shadow-[0_1px_20px_rgba(0,0,0,0.5)] rounded-xl mb-6 break-inside-avoid flex flex-col transform transition-transform duration-300">
+                    <div class="bg-orange-500 text-white p-4 py-3 rounded-xl">
+                        <h3 class="font-bold text-xl">${name}</h3>
+                    </div>
+                    <div class="p-4">
+                        <p class="font-semibold text-base mb-1">Description</p>
+                        <p class="text-gray-700 text-base mb-2">
+                            <span class="pb-1">${description}</span>
+                        </p>
+                        <div class="mt-6 flex items-center justify-between">
+                            <div class="flex">
+                              <span class="font-semibold inline-block py-1 px-3 uppercase rounded-full text-orange-600 bg-yellow-200">
+                              IDR ${item.fields.price}
+                              </span>
+                            </div>
+                            <div class="flex">
+                                <a href="/edit-item/${item.pk}" class="bg-green-400 hover:bg-green-600 text-white rounded-full p-2 transition duration-300 shadow-md mr-2">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                  </svg>
+                                </a>
+                                <a href="/delete/${item.pk}" class="bg-red-400 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+    }
+    document.getElementById("shop_entry_cards").className = classNameString;
+    document.getElementById("shop_entry_cards").innerHTML = htmlString;
+}
+refreshShopEntries();
+```

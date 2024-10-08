@@ -4,6 +4,12 @@
         <div class="flex items-center">
           <h1 class="text-3xl font-bold text-center text-yellow-900">NetBuy</h1>
         </div>
+        <div class="hidden md:flex">
+          <a href="" class="px-4 py-2 mr-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-500 transition duration-500">Home</a>
+          <a href="" class="px-4 py-2 mr-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-500 transition duration-500">Products</a>
+          <a href="" class="px-4 py-2 mr-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-500 transition duration-500">Categories</a>
+          <a href="" class="px-4 py-2 mr-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-500 transition duration-500">Carts</a>
+        </div>
         <div class="hidden md:flex items-center">
           {% if user.is_authenticated %}
             <span class="text-yellow-800 mr-6">Logged in as {{ user.username }}</span>
@@ -32,8 +38,12 @@
     <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full">
       <div class="pt-2 pb-3 space-y-1 mx-auto">
         {% if user.is_authenticated %}
-          <span class="block text-yellow-800 px-3 py-2">Logged in as {{ user.username }}</span>
-          <a href="{% url 'main:logout' %}" class="block text-center border-2 border-yellow-900 text-yellow-900 hover:bg-red-700 hover:border-red-700 hover:text-yellow-500 font-bold py-2 px-4 rounded-full transition duration-300">
+          <span class="block text-yellow-800 pb-2">Logged in as {{ user.username }}</span>
+          <a href="" class="block text-center px-4 py-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-600 transition duration-500">Home</a>
+          <a href="" class="block text-center px-4 py-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-600 transition duration-500">Products</a>
+          <a href="" class="block text-center px-4 py-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-600 transition duration-500">Categories</a>
+          <a href="" class="block text-center px-4 py-2 rounded-full font-semibold text-yellow-900 hover:bg-yellow-600 transition duration-500">Carts</a>
+          <a href="{% url 'main:logout' %}" class="block text-center text-yellow-900 hover:bg-red-700 hover:text-yellow-500 font-bold py-2 px-4 rounded-full transition duration-300">
             Logout
           </a>
         {% else %}
