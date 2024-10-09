@@ -16,11 +16,9 @@ import datetime
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    # shop_entries = ShopEntry.objects.filter(user=request.user)
 
     context = {
         'name': request.user.username,
-        # 'shop_entries': shop_entries,
         'last_login': request.COOKIES['last_login'],
     }
     return render(request, "main.html", context)
