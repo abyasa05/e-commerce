@@ -11,7 +11,9 @@ from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
 from main.forms import ShopEntryForm
 from main.models import ShopEntry
+from django.http import JsonResponse
 import datetime
+import json
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -120,3 +122,21 @@ def create_shop_entry_ajax(request):
     new_shop_entry.save()
 
     return HttpResponse(b"CREATED", status=201)
+
+@csrf_exempt
+def create_shop_entry_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_shop_entry = ShopEntry.objects.create(
+            user=request.user,
+            name=data["name"],
+            price=int(data["price"]),
+            description=data["description"]
+        )
+
+        new_shop_entry.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
