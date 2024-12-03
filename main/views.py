@@ -25,6 +25,7 @@ def show_main(request):
     }
     return render(request, "main.html", context)
 
+@csrf_exempt
 def create_shop_entry(request):
     form = ShopEntryForm(request.POST or None)
 
@@ -92,6 +93,7 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
+@csrf_exempt
 def edit_item(request, id):
     item = ShopEntry.objects.get(pk = id)
     form = ShopEntryForm(request.POST or None, instance=item)
@@ -103,6 +105,7 @@ def edit_item(request, id):
     context = {'form': form}
     return render(request, "edit_item.html", context)
 
+@csrf_exempt
 def delete_item(request, id):
     item = ShopEntry.objects.get(pk = id)
     item.delete()
