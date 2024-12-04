@@ -2,7 +2,7 @@
 - NPM: **2306207663**
 - Kelas: **F**
  
-[Tautan menuju Aplikasi](http://muhammad-abyasa-netbuy.pbp.cs.ui.ac.id/)
+[Tautan menuju Aplikasi](https://muhammad-abyasa-netbuy.pbp.cs.ui.ac.id/)
 
 1. Pada dasarnya, JavaScript berfungsi dalam membuat suatu aplikasi web menjadi lebih interaktif dan dinamis. Penggunaan JavaScript dalam suatu aplikasi web di antaranya dalam melakukan proses validasi form, memodifikasi struktur/tampilan HTML dan CSS dalam page secara dinamis, menjalankan _event handling_ berdasarkan aktivitas user dalam web, serta melakukan pengiriman data secara asinkronus menggunakan AJAX.
 
